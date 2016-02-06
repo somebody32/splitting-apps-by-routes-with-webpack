@@ -1,15 +1,16 @@
 import _ from 'underscore';
 import Backbone from 'backbone';
 
-// all the routes from the mini-apps
-const custom_apps_routes = {
-  about: {
-    'about': 'about',
-  },
-  heavy: {
-    'heavy(/:heavy_param)': 'heavy',
-  }
-};
+const custom_apps_registry = {};
+const custom_apps_routes = {};
+const custom_apps_context = require.context('./apps', true, /metadata\.js$/);
+
+// Creating the index of metadata which holds {app_name: {metadata}} pairs.
+custom_apps_context.keys().reduce((collector, routes_file) => {
+  const app_metadata = custom_apps_context(routes_file).default;
+  collector[app_metadata.name] = app_metadata;
+  return collector;
+}, custom_apps_registry);
 
 // we need to convert Backbone routes to plain RegExps
 function routeToRegExp(route) {
@@ -17,11 +18,12 @@ function routeToRegExp(route) {
 }
 
 // Creating the index of routes' regexes
-_.each(custom_apps_routes, (value, key) => {
-  custom_apps_routes[key] = Object.keys(value).map(routeToRegExp);
+_.each(custom_apps_registry, (value, key) => {
+  custom_apps_routes[key] = Object.keys(value.routes).map(routeToRegExp);
 });
 
 export default path => {
   const matcher = route => route.test(path);
-  return _.findKey(custom_apps_routes, routes => _.some(routes, matcher));
+  const app_name = _.findKey(custom_apps_routes, routes => _.some(routes, matcher));
+  return custom_apps_registry[app_name];
 }

@@ -19,10 +19,10 @@ export default Backbone.Router.extend({
   },
 
   handle404(path) {
-    const mini_app_name = AppFinder(path);
+    const mini_app = AppFinder(path);
 
-    if (mini_app_name) {
-      const handler = require('bundle!./apps/' + mini_app_name + '/index.js');
+    if (mini_app) {
+      const handler = require('bundle!./apps/' + mini_app.name + '/index.js');
       handler(bundle => {
         const App = bundle.default;
         App();
