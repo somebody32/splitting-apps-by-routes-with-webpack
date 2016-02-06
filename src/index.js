@@ -2,13 +2,19 @@ import Backbone from 'backbone';
 import $ from 'jquery';
 
 import Router from './router';
-import AboutApp from './apps/about/';
-import HeavyApp from './apps/heavy/';
 
 $(() => {
   new Router();
-  AboutApp();
-  HeavyApp();
 
+  require.ensure([], require => {
+    const AboutApp = require('./apps/about/').default;
+    AboutApp();
+  });
+
+  require.ensure([], require => {
+   const HeavyApp = require('./apps/heavy/').default;
+   HeavyApp();
+  });
+  
   Backbone.history.start();
 });
