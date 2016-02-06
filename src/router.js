@@ -22,8 +22,9 @@ export default Backbone.Router.extend({
     const mini_app_name = AppFinder(path);
 
     if (mini_app_name) {
-      require.ensure([], require => {
-        const App = require('./apps/' + mini_app_name + '/index.js').default;
+      const handler = require('bundle!./apps/' + mini_app_name + '/index.js');
+      handler(bundle => {
+        const App = bundle.default;
         App();
         Backbone.history.loadUrl(); // just refreshing the current path, because we've added new paths that we can handle
       });
