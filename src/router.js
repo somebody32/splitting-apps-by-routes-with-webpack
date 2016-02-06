@@ -1,6 +1,7 @@
-
 import Backbone from 'backbone';
 import $ from 'jquery';
+
+import AppFinder from './app_finder';
 
 export default Backbone.Router.extend({
   routes: {
@@ -17,7 +18,17 @@ export default Backbone.Router.extend({
     $('#app').html("You're viewing a part of the main app, it is lightweight and very actively used");
   },
 
-  handle404() {
-    alert('404');
+  handle404(path) {
+    const mini_app_name = AppFinder(path);
+
+    if (mini_app_name) {
+      require.ensure([], require => {
+        const App = require('./apps/' + mini_app_name + '/index.js').default;
+        App();
+        Backbone.history.loadUrl(); // just refreshing the current path, because we've added new paths that we can handle
+      });
+    } else {
+     alert('404');
+    }
   }
 });
