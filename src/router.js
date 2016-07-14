@@ -22,12 +22,12 @@ export default Backbone.Router.extend({
     const mini_app = AppFinder(path);
 
     if (mini_app) {
-      const handler = require('bundle!./apps/' + mini_app.name + '/index.js');
-      handler(bundle => {
+      const handler = System.import(`./apps/${mini_app.name}/index.js`);
+      handler.then(bundle => {
         const App = bundle.default;
         App();
         Backbone.history.loadUrl(); // just refreshing the current path, because we've added new paths that we can handle
-      });
+      }).catch(() => alert("can't load the bundle"));
     } else {
       alert('404');
     }
