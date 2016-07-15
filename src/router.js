@@ -29,7 +29,7 @@ export default Backbone.Router.extend({
         Backbone.history.loadUrl(); // just refreshing the current path, because we've added new paths that we can handle
       });
     } else {
-     alert('404');
+      alert('404');
     }
   }
 });
