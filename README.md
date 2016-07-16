@@ -2,6 +2,8 @@
 
 You can read [the article](https://medium.com/@somebody32/how-to-split-your-apps-by-routes-with-webpack-36b7a8a6231#.dy38h6mqr) or just follow the commits.
 
+If you want Webpack2-ready version of the code, please see [this PR](https://github.com/somebody32/splitting-apps-by-routes-with-webpack/pull/1).
+
 How to run it localy:
 
 ```
